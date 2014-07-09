@@ -5,22 +5,34 @@ use 5.10.1;
 
 use Getopt::Long;
 use Pod::Usage;
+use DateTime::Format::Epoch::Unix;
 use JSON;
 
 my $opts = get_options();
 
 # 366 tuples of 2 entries each, date + score
 # ["2014/05/11",10]
-my @work;
+
+# 0 is today, 1 is yesterday...
+my @days;
+
+my $formatter = DateTime::Format::Epoch::Unix->new();
 
 for my $dir (@ARGV) {
-	for my $line (qx(git --work-tree=$dir log --format="%at")) {
-		my ($day, $month, $year) = (localtime($line))[3,4,5];
-		$year += 1900;
-		$month += 1;
-		printf("%4d/%02d/%02d\n", $year, $month, $day);
+	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="1 year ago")) {
+		my $log_entry = $formatter->parse_datetime($line);
+		my $ago = DateTime->today()->delta_days($log_entry)->in_units('days');
+		$days[$ago]->[0] = $log_entry->set_time_zone('local')->ymd('/');
+		$days[$ago]->[1]++;
 	}
 }
+
+for my $day (0..366) {
+	$days[$day] ||= [DateTime->today()->subtract(days=>$day)->set_time_zone('local')->ymd('/'), 0];
+}
+
+@days = reverse @days;
+print encode_json(\@days);
 
 sub get_options {
 	my %opts;
