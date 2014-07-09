@@ -24,7 +24,7 @@ for my $dir (@ARGV) {
 	}
 }
 
-
+# fill in the empty days
 for my $day (0..366) {
 	$days[$day] ||= [DateTime->today(time_zone=>'local')->subtract(days=>$day)->set_time_zone('local')->ymd('/'), 0];
 }
@@ -79,12 +79,15 @@ imitates GitHub's contribution data.
 
 =head1 DEPENDENCIES
 
-fakehubstats uses JSON and assumes you have git installed.
+fakehubstats is written in Perl and uses the JSON and DateTime modules.
 
 =head1 EXAMPLES
 
 	# print the simulated JSON feed for your personal git repo
 	./fakehubstats.pl /path/to/git/repo
+
+	# print the simulated JSON feed for your person git repos
+	./fakehubstats.pl /path/to/git/repo/directory/*
 
 =head1 AUTHOR
 
