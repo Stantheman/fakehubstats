@@ -7,13 +7,31 @@ use Getopt::Long;
 use Pod::Usage;
 use JSON;
 
-my %opts;
+my $opts = get_options();
 
-GetOptions(\%opts,
-	'help|h!',
-) or pod2usage(1);
-pod2usage(1) if $opts{help};
+# 366 tuples of 2 entries each, date + score
+# ["2014/05/11",10]
+my @work;
 
+for my $dir (@ARGV) {
+	for my $line (qx(git --work-tree=$dir log --format="%at")) {
+		my ($day, $month, $year) = (localtime($line))[3,4,5];
+		$year += 1900;
+		$month += 1;
+		printf("%4d/%02d/%02d\n", $year, $month, $day);
+	}
+}
+
+sub get_options {
+	my %opts;
+
+	GetOptions(\%opts,
+		'help|h!',
+	) or pod2usage(1);
+	pod2usage(1) if $opts{help};
+
+	return \%opts;
+}
 
 __END__
 
