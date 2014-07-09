@@ -16,7 +16,7 @@ my $opts = get_options();
 # 0 is today, 1 is yesterday...
 my @days;
 for my $dir (@ARGV) {
-	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="1 year ago")) {
+	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="366 days ago")) {
 		my $log_entry = DateTime->from_epoch(epoch => $line, time_zone=>'local');
 		my $ago = DateTime->today(time_zone=>'local')->delta_days($log_entry)->in_units('days');
 		$days[$ago]->[0] ||= $log_entry->set_time_zone('local')->ymd('/');
@@ -25,7 +25,7 @@ for my $dir (@ARGV) {
 }
 
 
-for my $day (0..365) {
+for my $day (0..366) {
 	$days[$day] ||= [DateTime->today(time_zone=>'local')->subtract(days=>$day)->set_time_zone('local')->ymd('/'), 0];
 }
 
