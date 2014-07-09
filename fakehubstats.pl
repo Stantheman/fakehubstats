@@ -5,7 +5,7 @@ use 5.10.1;
 
 use Getopt::Long;
 use Pod::Usage;
-use DateTime::Format::Epoch::Unix;
+use DateTime;
 use JSON;
 
 my $opts = get_options();
@@ -16,13 +16,11 @@ my $opts = get_options();
 # 0 is today, 1 is yesterday...
 my @days;
 
-my $formatter = DateTime::Format::Epoch::Unix->new();
-
 for my $dir (@ARGV) {
 	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="1 year ago")) {
-		my $log_entry = $formatter->parse_datetime($line);
+		my $log_entry = DateTime->from_epoch(epoch => $line);
 		my $ago = DateTime->today()->delta_days($log_entry)->in_units('days');
-		$days[$ago]->[0] = $log_entry->set_time_zone('local')->ymd('/');
+		$days[$ago]->[0] ||= $log_entry->set_time_zone('local')->ymd('/');
 		$days[$ago]->[1]++;
 	}
 }
