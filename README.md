@@ -34,7 +34,7 @@ fakehubstats is written in Perl and uses the JSON and DateTime modules.
         # print the simulated JSON feed for your personal git repo
         ./fakehubstats.pl /path/to/git/repo
 
-        # print the simulated JSON feed for your person git repos
+        # print the simulated JSON feed for your personal git repos
         ./fakehubstats.pl /path/to/git/repo/directory/*
 
 # AUTHOR
