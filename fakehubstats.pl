@@ -19,14 +19,14 @@ for my $dir (@ARGV) {
 	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="365 days ago")) {
 		my $log_entry = DateTime->from_epoch(epoch => $line, time_zone=>'local');
 		my $ago = DateTime->today(time_zone=>'local')->delta_days($log_entry)->in_units('days');
-		$days[$ago]->[0] ||= $log_entry->set_time_zone('local')->ymd('/');
+		$days[$ago]->[0] ||= $log_entry->set_time_zone('local')->ymd('-');
 		$days[$ago]->[1]++;
 	}
 }
 
 # fill in the empty days
 for my $day (0..365) {
-	$days[$day] ||= [DateTime->today(time_zone=>'local')->subtract(days=>$day)->set_time_zone('local')->ymd('/'), 0];
+	$days[$day] ||= [DateTime->today(time_zone=>'local')->subtract(days=>$day)->set_time_zone('local')->ymd('-'), 0];
 }
 
 @days = reverse @days;
