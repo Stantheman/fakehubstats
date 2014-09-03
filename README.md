@@ -24,7 +24,7 @@ contribution data
 
 fakehubstats takes a list of git repositories and generates a JSON feed that
 imitates GitHub's contribution data. The primary reason fakehubstats exists is
-to pump data into (https://github.com/akerl/githubchart)[akerl/githubchart] to
+to pump data into [akerl/githubchart](https://github.com/akerl/githubchart) to
 create contribution data for private repositories.
 
 If you have local clones of your public repositories, you can run this tool
@@ -32,11 +32,11 @@ across those repos and your private repos to create a combined contribution
 graph. You may notice squares are colored on Github's graph where they're missing
 on your own because you opened an issue on Github that day. A naive solution to this
 problem is to combine both Github's data and your own by choosing the MAX for each day.
-The following (http://stedolan.github.io/jq/)[jq] one-liner should give you that:
+The following [jq](http://stedolan.github.io/jq/) one-liner should give you that:
 
-    jq -r -s  'add | group_by(.[0]) |  map(max_by(.[1])) ' fakehub.json gh.json
+    jq -r -s  'add | group_by(.[0]) |  map(max_by(.[1]))' fakehub.json gh.json
 
-You can get Github's contribution data from https://github.com/users/`username`/contributions
+You can get Github's contribution data from ```https://github.com/users/username/contributions```
 
 # DEPENDENCIES
 
