@@ -40,9 +40,9 @@ GitHub recently changed their private stats API. They now serve SVGs directly an
 do not provide the JSON of the contributions. You can extract the information from
 the SVG and transform it into JSON with an XML parser. You can also copy this dirty
 one-liner, replacing in your username:
-
-   curl -s github.com/users/stantheman/contributions -L | grep data-date | perl -MJSON -nE 'if ($_ =~ /data-count="(\d+)" data-date="(.*)"/) { push @stuff, [$2, $1]} END{ print encode_json(\@stuff)}'
-
+```
+curl -s github.com/users/stantheman/contributions -L | grep data-date | perl -MJSON -nE 'if ($_ =~ /data-count="(\d+)" data-date="(.*)"/) { push @stuff, [$2, $1]} END{ print encode_json(\@stuff)}'
+```
 # DEPENDENCIES
 
 fakehubstats is written in Perl and uses the JSON and DateTime modules.
