@@ -36,7 +36,12 @@ The following [jq](http://stedolan.github.io/jq/) one-liner should give you that
 
     jq -r -s  'add | group_by(.[0]) |  map(max_by(.[1]))' fakehub.json gh.json
 
-You can get Github's contribution data from ```https://github.com/users/username/contributions```
+GitHub recently changed their private stats API. They now serve SVGs directly and
+do not provide the JSON of the contributions. You can extract the information from
+the SVG and transform it into JSON with an XML parser. You can also copy this dirty
+one-liner, replacing in your username:
+
+   curl -s github.com/users/stantheman/contributions -L | grep data-date | perl -MJSON -nE 'if ($_ =~ /data-count="(\d+)" data-date="(.*)"/) { push @stuff, [$2, $1]} END{ print encode_json(\@stuff)}'
 
 # DEPENDENCIES
 
