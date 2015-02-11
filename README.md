@@ -47,6 +47,11 @@ curl -s github.com/users/stantheman/contributions -L | grep data-date | perl -MJ
 
 fakehubstats is written in Perl and uses the JSON and DateTime modules.
 
+On Debian-based systems:
+```
+apt-get install libjson-perl libdatetime-perl
+```
+
 # EXAMPLES
 
         # print the simulated JSON feed for your personal git repo
