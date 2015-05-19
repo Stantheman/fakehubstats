@@ -9,6 +9,8 @@ use DateTime;
 use JSON;
 
 my $opts = get_options();
+my $author = "";
+if ($opts->{author}) { $author = $opts->{author}; }
 
 # 366 tuples of 2 entries each, date + score
 # ["2014/05/11",10]
@@ -16,7 +18,7 @@ my $opts = get_options();
 # 0 is today, 1 is yesterday...
 my @days;
 for my $dir (@ARGV) {
-	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="365 days ago")) {
+	for my $line (qx(git --git-dir=$dir/.git log --format="%at" --since="365 days ago" --author="$author")) {
 		my $log_entry = DateTime->from_epoch(epoch => $line, time_zone=>'local');
 		my $ago = DateTime->today(time_zone=>'local')->delta_days($log_entry)->in_units('days');
 		$days[$ago]->[0] ||= $log_entry->set_time_zone('local')->ymd('-');
@@ -38,6 +40,7 @@ sub get_options {
 
 	GetOptions(\%opts,
 		'help|h!',
+		'author|a=s',
 	) or pod2usage(1);
 	pod2usage(1) if $opts{help};
 
@@ -61,6 +64,7 @@ contribution data
 
 	Options:
 	  -h, --help            print help information
+	  -a, --author          restricts commits to specified author
 
 =head1 OPTIONS
 
@@ -69,6 +73,10 @@ contribution data
 =item B<-h>, B<--help>
 
 Prints the help for this program
+
+=item B<-a>, B<--author>
+
+Restricts commits to the specified author
 
 =back
 
@@ -86,8 +94,11 @@ fakehubstats is written in Perl and uses the JSON and DateTime modules.
 	# print the simulated JSON feed for your personal git repo
 	./fakehubstats.pl /path/to/git/repo
 
-	# print the simulated JSON feed for your person git repos
+	# print the simulated JSON feed for your personal git repos
 	./fakehubstats.pl /path/to/git/repo/directory/*
+
+	# print the simulated JSON feed for commits made by Jon in your personal git repos
+	./fakehubstats.pl --author="Jon" /path/to/git/repo/directory/*
 
 =head1 AUTHOR
 

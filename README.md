@@ -13,12 +13,17 @@ contribution data
 
         Options:
           -h, --help            print help information
+          -a, --author          restricts commits to specified author
 
 # OPTIONS
 
 - **-h**, **--help**
 
     Prints the help for this program
+
+- **-a**, **--author**
+
+    Restricts commits to the specified author
 
 # DESCRIPTION
 
